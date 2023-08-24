@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+</head>
+
+<body style="background-color: black;">
+
+<div class="container">       
+  <img src="mark.png" alt="Cinque Terre" width="100%" height="100%">
+  <textarea class="form-control" rows="1" id="user_message" name="user_message"></textarea>
+  <button type="button" class="btn btn-light d-block m-auto my-2 px-3 py-2 fw-bold" onclick="getContent()">Run it</button>
+</div>
+<script>
+  async function getContent() {
+    var user_message = document.getElementById("user_message").value;
+    var gpt_response = '';
+    fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer <Your_API_Key>'
+      },
+      body: JSON.stringify({
+        "model": "gpt-3.5-turbo",
+        "messages": [
+            {
+                "role": "system",
+                "content": "You are a helpful assistant."
+            },
+            {
+                "role": "user",
+                "content": user_message,
+            }
+        ]
+      })
+    })
+      .then(response => response.json())
+      .then(result => {
+        gpt_response = result.choices[0].message.content;
+        alert(gpt_response);
+        document.getElementById("user_message").value = "";
+      })
+  }
+
+</script>
+</body>
+</html>
